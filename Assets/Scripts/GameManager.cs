@@ -4,13 +4,17 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    [SerializeField] private Player player;
+    [SerializeField] private Transform playerTransform;
 
-    public TextMeshProUGUI scoreText;
-    public GameObject targetPrefab;
-    private int numberOfTargets = 10;
+    [SerializeField] private TextMeshProUGUI scoreLabel;
+    [SerializeField] private TextMeshProUGUI hpLabel;
+    [SerializeField] private GameObject enemyPrefab;
+    
+    [SerializeField] private int numberOfEnemies = 10;
 
-    private int score = 0;
-    public int enemiesLeft;
+    public int Score { get; set; }
+    public int EnemiesLeft { get; set; }
 
     private void Awake()
     {
@@ -31,19 +35,19 @@ public class GameManager : MonoBehaviour
 
     private void InitializeGame()
     {
-        score = 0;
-        UpdateScoreUI();
+        Score = 0;
+        UpdateUI();
 
-        SpawnTargets(numberOfTargets);
+        SpawnTargets(numberOfEnemies);
 
-        enemiesLeft = numberOfTargets;
+        EnemiesLeft = numberOfEnemies;
     }
 
     private void SpawnTargets(int count)
     {
         for (int i = 0; i < count; i++)
         {
-            Instantiate(targetPrefab, GetRandomSpawnPosition(), Quaternion.identity);
+            Instantiate(enemyPrefab, GetRandomSpawnPosition(), Quaternion.identity);
         }
     }
 
@@ -56,23 +60,38 @@ public class GameManager : MonoBehaviour
 
     public void IncrementScore(int points)
     {
-        score += points;
-        enemiesLeft--;
+        Score += points;
+        EnemiesLeft--;
 
-        UpdateScoreUI();
+        UpdateUI();
 
-        if (enemiesLeft == 0)
+        if (EnemiesLeft == 0)
         {
-            enemiesLeft = numberOfTargets;
-            SpawnTargets(numberOfTargets);
+            EnemiesLeft = numberOfEnemies;
+            SpawnTargets(numberOfEnemies);
         }
     }
 
-    private void UpdateScoreUI()
+    private void UpdateUI()
     {
-        if (scoreText != null)
+        if (scoreLabel != null)
         {
-            scoreText.text = "Score: " + score;
+            scoreLabel.text = "Score: " + Score;
         }
+
+        if(hpLabel != null)
+        {
+            hpLabel.text = "Health Points: " + player.GetHealthPoints();
+        }
+    }
+
+    internal void EnemyHitPlayer(int enemyDamage)
+    {
+        player.TakeDamage(enemyDamage);
+    }
+
+    internal Vector3 GetPlayerPosition()
+    {
+        return playerTransform.position;
     }
 }

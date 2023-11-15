@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dddaa13564e31834091d2758cfbbf077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 0}
-  targetPrefab: {fileID: 693227937601971546, guid: a1a0b536f738f874a8c2572e56ff513a, type: 3}
-  numberOfTargets: 10
+  player: {fileID: 0}
+  scoreLabel: {fileID: 0}
+  hpLabel: {fileID: 0}
+  enemyPrefab: {fileID: 693227937601971546, guid: a1a0b536f738f874a8c2572e56ff513a, type: 3}
+  numberOfEnemies: 10

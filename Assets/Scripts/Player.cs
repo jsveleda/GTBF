@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private float healthPoints = 10f;
     [SerializeField] private float moveSpeed;
 
     private Rigidbody2D rb;
@@ -36,7 +37,7 @@ public class Player : MonoBehaviour
 
         transform.localRotation = Quaternion.Euler(0, 0, angle);
 
-        if (Input.GetMouseButtonDown(0) && nextFire <= 0f)
+        if ((Input.GetMouseButton(0) || Input.GetMouseButtonDown(0)) && nextFire <= 0f)
         {
             Shoot();
             nextFire = fireRate;
@@ -56,5 +57,15 @@ public class Player : MonoBehaviour
     {
         Vector2 targetPosition = new (horizontalMovement, verticalMovement);
         rb.velocity = targetPosition.normalized * moveSpeed;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        healthPoints -= damage;
+    }
+
+    public float GetHealthPoints()
+    {
+        return healthPoints;
     }
 }
