@@ -5,19 +5,18 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float healthPoints = 10f;
     [SerializeField] private float moveSpeed;
+    [Range(0.1f, 1f)]
+    [SerializeField] private float fireRate = 0.5f;
+
+    [SerializeField] private Transform fireOriginPoint;
+    [SerializeField] private GameObject projectilePrefab;
 
     private Rigidbody2D rb;
     private float horizontalMovement;
     private float verticalMovement;
 
     private Vector2 mousePosition;
-
-    [SerializeField] private GameObject projectilePrefab;
-    [SerializeField] private Transform firePoint;
-
-    [Range(0.1f, 1f)]
-    [SerializeField] private float fireRate = 0.5f;
-    private float nextFire = 0f;
+    private float fireRateCountDown = 0f;
 
     private void Start()
     {
@@ -37,20 +36,25 @@ public class Player : MonoBehaviour
 
         transform.localRotation = Quaternion.Euler(0, 0, angle);
 
-        if ((Input.GetMouseButton(0) || Input.GetMouseButtonDown(0)) && nextFire <= 0f)
+        if (ShotBindPressed() && fireRateCountDown <= 0f)
         {
             Shoot();
-            nextFire = fireRate;
+            fireRateCountDown = fireRate;
         }
         else
         {
-            nextFire -= Time.deltaTime;
+            fireRateCountDown -= Time.deltaTime;
         }
+    }
+
+    private static bool ShotBindPressed()
+    {
+        return Input.GetMouseButton(0) || Input.GetMouseButtonDown(0);
     }
 
     private void Shoot()
     {
-        Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+        Instantiate(projectilePrefab, fireOriginPoint.position, fireOriginPoint.rotation);
     }
 
     private void FixedUpdate()

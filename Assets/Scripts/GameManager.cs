@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     [SerializeField] private Player player;
-    [SerializeField] private Transform playerTransform;
+    private Transform playerTransform;
 
     [SerializeField] private TextMeshProUGUI scoreLabel;
     [SerializeField] private TextMeshProUGUI hpLabel;
@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        playerTransform = GameObject.Find("Player").transform;
         InitializeGame();
     }
 

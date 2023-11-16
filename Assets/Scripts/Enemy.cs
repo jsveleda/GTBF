@@ -7,12 +7,25 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        Vector3 playerPosition = GameManager.instance.GetPlayerPosition();
+        Vector3 playerPosition = GameManager
+            .instance
+            .GetPlayerPosition();
 
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            playerPosition,
-            moveSpeed * Time.deltaTime);
+        float distanceToPlayer = Vector3
+            .Distance(transform.position, playerPosition);
+
+        MoveTowardsTarget(playerPosition, distanceToPlayer);
+    }
+
+    private void MoveTowardsTarget(Vector3 target, float minDistance)
+    {
+        if (minDistance > 1.5f)
+        {
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                target,
+                moveSpeed * Time.deltaTime);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -21,7 +34,7 @@ public class Enemy : MonoBehaviour
 
         if (go.CompareTag("Projectile"))
         {
-            //If this enemy hits a ammo he dies
+            //If this enemy hits a projectile he dies
             GameManager.instance.IncrementScore(2);
             Destroy(gameObject);
         }
