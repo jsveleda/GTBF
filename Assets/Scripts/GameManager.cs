@@ -48,7 +48,24 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            Instantiate(enemyPrefab, GetRandomSpawnPosition(), Quaternion.identity);
+            GameObject go = Instantiate(enemyPrefab, GetRandomSpawnPosition(), Quaternion.identity);
+            Enemy newEnemy = go.GetComponent<Enemy>();
+            
+            newEnemy.OnEnemyDeath.AddListener(IncrementScore);
+            newEnemy.OnEnemyHit.AddListener(EnemyHitPlayer);
+        }
+    }
+
+    private void UpdateUI()
+    {
+        if (scoreLabel != null)
+        {
+            scoreLabel.text = "Score: " + Score;
+        }
+
+        if (hpLabel != null)
+        {
+            hpLabel.text = "Health Points: " + player.GetHealthPoints();
         }
     }
 
@@ -59,9 +76,9 @@ public class GameManager : MonoBehaviour
         return new Vector3(x, y, 0f);
     }
 
-    public void IncrementScore(int points)
+    public void IncrementScore(int scorePoints)
     {
-        Score += points;
+        Score += scorePoints;
         EnemiesLeft--;
 
         UpdateUI();
@@ -73,21 +90,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void UpdateUI()
-    {
-        if (scoreLabel != null)
-        {
-            scoreLabel.text = "Score: " + Score;
-        }
-
-        if(hpLabel != null)
-        {
-            hpLabel.text = "Health Points: " + player.GetHealthPoints();
-        }
-    }
-
     internal void EnemyHitPlayer(int enemyDamage)
     {
+        UpdateUI();
         player.TakeDamage(enemyDamage);
     }
 

@@ -63,9 +63,9 @@ public class Player : MonoBehaviour
         rb.velocity = targetPosition.normalized * moveSpeed;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damagePoints)
     {
-        healthPoints -= damage;
+        healthPoints -= damagePoints;
     }
 
     public float GetHealthPoints()
